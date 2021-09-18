@@ -4,7 +4,7 @@ const Query = {
     getAllLists: async function() {
         try {
             return await pool.query("SELECT lists.id, lists.title, "
-            + "COALESCE(JSON_AGG(list) FILTER (WHERE list.id IS NOT NULL), '[]') AS list "
+            + "COALESCE(JSON_AGG(list) FILTER (WHERE list.id IS NOT NULL), '[]') AS items "
             + "FROM lists LEFT OUTER JOIN list ON list.list_id = lists.id "
             + "GROUP BY list.list_id, lists.id;")
         } catch(err) {
@@ -26,7 +26,7 @@ const Query = {
     getItemFromList: async function(id) {
         try {
             return await pool.query("SELECT lists.id, lists.title, "
-                + "COALESCE(JSON_AGG(list) FILTER (WHERE list.id IS NOT NULL), '[]') AS list "
+                + "COALESCE(JSON_AGG(list) FILTER (WHERE list.id IS NOT NULL), '[]') AS items "
                 + "FROM lists LEFT OUTER JOIN list ON list.list_id = lists.id "
                 + "WHERE lists.id = ($1) "
                 + "GROUP BY list.list_id, lists.id;",
